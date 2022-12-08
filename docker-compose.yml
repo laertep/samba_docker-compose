@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  samba:
+   image: dperson/samba
+   environment:
+      - TZ=${TZ}
+      - WORKGROUP=teste
+      - USER=${U01_CLEAR};${P01_CLEAR}
+      - USERID=${PUID}
+      - GROUPID=${PGID}
+   networks:
+      - vpcsamba
+   ports:
+      - '137:137/udp'
+      - '138:138/udp'
+      - '139:139/tcp'
+      #- '445:445/tcp'
+   read_only: true
+   tmpfs:
+      - /tmp
+   restart: unless-stopped
+   stdin_open: true
+   tty: true
+   volumes:
+      - ./samba:/mnt:z
+   command:
+      -u "${U01_CLEAR};${U02_CLEAR};${P02_CLEAR}"
+      -s "tv;/mnt/tv;no;no;no;${U02_CLEAR}"
+      -s "share;/mnt/share;yes;no;yes;all"
+      -s "data;/mnt/data;no;no;no;${U01_CLEAR}"
+      -p
+volumes:
+    samba:
+networks:
+ vpcsamba:
+      
+      
+
+       
